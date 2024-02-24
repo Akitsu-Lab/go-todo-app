@@ -1,0 +1,15 @@
+services:
+  db:
+    image: todo_db
+    # コンテナ名を設定
+    container_name: "todo_db"
+    volumes:
+      # データ永続化
+      - ./data:/var/lib/mysql
+    ports:
+      - "13306:3306"
+    # ヘルスチェック
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
