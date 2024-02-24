@@ -21,6 +21,10 @@
    ```shell
    docker-compose up -d
    ```
+## 停止
+```shell
+docker-compose down
+```
 
 ## DBコンテナにMySQLログイン
 - コンテナに入ってログイン
