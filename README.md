@@ -28,16 +28,16 @@ docker-compose down
 
 ## DBコンテナにMySQLログイン
 - コンテナに入ってログイン
-```shell
-docker exec -it todo_db /bin/bash
-```
-```shell
-mysql -u root -p
-```
+  ```shell
+  docker exec -it todo_db /bin/bash
+  ```
+  ```shell
+  mysql -u root -p
+  ```
 - コンテナに入らずにログイン
-```shell
-mysql -u root -p --port=13306 --protocol=TCP
-```
+  ```shell
+  mysql -u root -p --port=13306 --protocol=TCP
+  ```
 
 
 ## 参考
