@@ -13,3 +13,14 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+  backend:
+    build: ./backend
+    container_name: "todo_backend"
+    environment:
+      DBUSER: ${DBUSER}
+      DBPASS: ${DBPASS}
+      DBHOST: db # dbサービス名
+      DBPORT: ${DBPORT}
+    depends_on:
+      db:
+        condition: service_healthy

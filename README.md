@@ -2,6 +2,14 @@
 
 ## 実行
 
+環境変数を設定する
+```shell
+export DBUSER=root
+export DBPASS=rootpass
+export DBHOST=localhost
+export DBPORT=3306
+```
+
 docker-compose立ち上げ
 
 ```shell
