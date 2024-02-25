@@ -1,6 +1,6 @@
 services:
   db:
-    image: todo_db
+    build: ./db
     # コンテナ名を設定
     container_name: "todo_db"
     volumes:
