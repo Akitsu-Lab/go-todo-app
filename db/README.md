@@ -3,7 +3,7 @@
 ## DBイメージ生成
 
 ```shell
-docker build -t todo_db ./db
+docker build -t todo_db .
 ```
 
 ## 参考
