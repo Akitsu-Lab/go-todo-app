@@ -4,7 +4,7 @@ services:
     # コンテナ名を設定
     container_name: "todo_db"
     environment:
-      MYSQL_ROOT_PASSWORD: ${DBUSER}
+      MYSQL_ROOT_PASSWORD: ${DBPASS}
       MYSQL_USER: ${DBUSER}
       MYSQL_PASSWORD: ${DBPASS}
     volumes:
