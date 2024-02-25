@@ -5,8 +5,6 @@ services:
     container_name: "todo_db"
     environment:
       MYSQL_ROOT_PASSWORD: ${DBPASS}
-      MYSQL_USER: ${DBUSER}
-      MYSQL_PASSWORD: ${DBPASS}
     volumes:
       # データ永続化
       - ./data:/var/lib/mysql

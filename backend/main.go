@@ -2,9 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"github.com/go-sql-driver/mysql"
 	"log"
 	"os"
+
+	"github.com/go-sql-driver/mysql"
 )
 
 type task struct {
@@ -31,7 +32,7 @@ func main() {
 	}
 	err = db.Ping()
 	if err != nil {
-		log.Fatal("failed to pint db", err)
+		log.Fatal("failed to ping db", err)
 	}
 
 	log.Println("データベース接続完了")
