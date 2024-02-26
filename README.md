@@ -19,7 +19,7 @@ docker compose up -d
 ## 停止
 
 ```shell
-docker-compose down --rmi all --volumes --remove-orphans
+docker compose down --rmi all --volumes --remove-orphans
 ```
 
 ## DBコンテナにMySQLログイン
