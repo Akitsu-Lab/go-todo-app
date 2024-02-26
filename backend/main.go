@@ -52,12 +52,13 @@ func main() {
 
 	srv := &http.Server{
 		Handler: r,
-		Addr:    "127.0.0.1:8080",
+		Addr:    ":8080",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
 
+	//http.ListenAndServe(fmt.Sprintf(":%d", 8080), r)
 	log.Fatal(srv.ListenAndServe())
 
 }
