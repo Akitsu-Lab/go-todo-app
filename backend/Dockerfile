@@ -7,12 +7,13 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
-RUN go build -v -o /bin .
+
+# バイナリを /bin/app にビルドする
+RUN go build -v -o /app .
 
 FROM alpine:latest
 
-WORKDIR /app
-
-COPY --from=builder /bin ./
+# バイナリをコピーして実行可能にする
+COPY --from=builder /app /usr/local/bin/app
 
 CMD ["app"]
