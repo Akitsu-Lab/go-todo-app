@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -13,9 +14,9 @@ import (
 )
 
 type Task struct {
-	Id     int
-	Name   string
-	Status int
+	Id     int    `json:"id"`
+	Name   string `json:"name"`
+	Status int    `json:"status"`
 }
 
 var db *sql.DB
@@ -48,6 +49,7 @@ func main() {
 	// サーバーの起動
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
+	r.HandleFunc("/tasks", getListTasks)
 	http.Handle("/", r)
 
 	srv := &http.Server{
@@ -58,7 +60,6 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	//http.ListenAndServe(fmt.Sprintf(":%d", 8080), r)
 	log.Fatal(srv.ListenAndServe())
 
 }
@@ -67,4 +68,29 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "成功")
+}
+
+// List取得メソッド
+func getListTasks(w http.ResponseWriter, r *http.Request) {
+	// SELECT実行
+	rows, err := db.Query("SELECT * FROM tasks")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Taskに情報をセットする
+	var tasks []Task
+	for rows.Next() {
+		var task Task
+		err := rows.Scan(&task.Id, &task.Name, &task.Status)
+		if err != nil {
+			http.Error(w, "Scan Error", http.StatusInternalServerError)
+			return
+		}
+		tasks = append(tasks, task)
+	}
+	// JSON形式でレスポンスを返す
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(tasks)
 }
