@@ -49,7 +49,9 @@ func main() {
 	// サーバーの起動
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler)
-	r.HandleFunc("/tasks", getListTasks)
+	r.HandleFunc("/tasks", getListTasksHandler).Methods("GET")
+	r.HandleFunc("/tasks/{id:[0-9]+}", getOneTaskHandler).Methods("GET")
+
 	http.Handle("/", r)
 
 	srv := &http.Server{
@@ -71,7 +73,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // List取得メソッド
-func getListTasks(w http.ResponseWriter, r *http.Request) {
+func getListTasksHandler(w http.ResponseWriter, r *http.Request) {
 	// SELECT実行
 	rows, err := db.Query("SELECT * FROM tasks")
 	if err != nil {
@@ -83,6 +85,7 @@ func getListTasks(w http.ResponseWriter, r *http.Request) {
 	var tasks []Task
 	for rows.Next() {
 		var task Task
+		// sqlの結果をtaskの各パラメータに格納する
 		err := rows.Scan(&task.Id, &task.Name, &task.Status)
 		if err != nil {
 			http.Error(w, "Scan Error", http.StatusInternalServerError)
@@ -93,4 +96,10 @@ func getListTasks(w http.ResponseWriter, r *http.Request) {
 	// JSON形式でレスポンスを返す
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tasks)
+}
+
+func getOneTaskHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, "%v\n", vars["id"])
 }
