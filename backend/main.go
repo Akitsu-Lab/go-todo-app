@@ -100,6 +100,17 @@ func getListTasksHandler(w http.ResponseWriter, r *http.Request) {
 
 func getOneTaskHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+
+	row := db.QueryRow("SELECT * FROM tasks WHERE ID=?", vars["id"])
+
+	var task Task
+
+	err := row.Scan(&task.Id, &task.Name, &task.Status)
+	if err != nil {
+		http.Error(w, "Scan Error", http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, "%v\n", vars["id"])
+	json.NewEncoder(w).Encode(task)
 }
