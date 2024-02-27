@@ -20,6 +20,9 @@ docker build -t todo_backend .
 ```shell
 curl http://localhost:8080/tasks | jq
 ```
+```shell
+curl http://localhost:8080/tasks/2 | jq
+```
 
 ## 参考
 
