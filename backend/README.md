@@ -17,11 +17,21 @@ docker build -t todo_backend .
 
 ## API
 
+- 全権取得
+
 ```shell
 curl http://localhost:8080/tasks | jq
 ```
+
+- 1件取得
+
 ```shell
 curl http://localhost:8080/tasks/2 | jq
+```
+
+- 追加
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"name":"追加したタスク", "status":1}' http://localhost:8080/tasks
 ```
 
 ## 参考

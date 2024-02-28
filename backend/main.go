@@ -51,6 +51,7 @@ func main() {
 	r.HandleFunc("/", HomeHandler)
 	r.HandleFunc("/tasks", getListTasksHandler).Methods("GET")
 	r.HandleFunc("/tasks/{id:[0-9]+}", getOneTaskHandler).Methods("GET")
+	r.HandleFunc("/tasks", addTaskHandler).Methods("POST")
 
 	http.Handle("/", r)
 
@@ -113,4 +114,36 @@ func getOneTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(task)
+}
+
+func addTaskHandler(w http.ResponseWriter, r *http.Request) {
+	var task Task
+	err := json.NewDecoder(r.Body).Decode(&task)
+
+	if err != nil {
+		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+		return
+	}
+
+	defer r.Body.Close()
+
+	// 挿入する値が正しいかどうか確認
+	log.Printf("Received task: %+v", task)
+
+	// データベースにタスクを挿入
+	result, err := db.Exec("INSERT INTO tasks (name, status) VALUES (?, ?)", &task.Name, &task.Status)
+	if err != nil {
+		// エラーの詳細をログに出力
+		log.Printf("Failed to insert task into database: %v", err)
+		http.Error(w, "Failed to insert task into database", http.StatusInternalServerError)
+		return
+	}
+
+	// 成功応答
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(w, "Task added successfully")
+
+	// 挿入されたタスクのIDを取得し、ログに出力
+	id, _ := result.LastInsertId()
+	log.Printf("Inserted task ID: %d", id)
 }

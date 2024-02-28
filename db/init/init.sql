@@ -5,10 +5,9 @@ USE `todo`;
 
 DROP TABLE IF EXISTS `tasks`;
 CREATE TABLE `tasks` (
-    id INT NOT NULL ,
+    id INT NOT NULL AUTO_INCREMENT  PRIMARY KEY,
     name VARCHAR(80) NOT NULL ,
     status INT NOT NULL ,
-    PRIMARY KEY (id),
     CHECK (status IN (0, 1, 2))
 );
 
