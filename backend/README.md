@@ -9,6 +9,12 @@ export DBHOST=localhost
 export DBPORT=3306
 ```
 
+## 実行
+
+```shell
+go run main.go
+```
+
 ## APIイメージ生成
 
 ```shell
