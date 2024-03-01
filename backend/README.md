@@ -40,6 +40,11 @@ curl http://localhost:8080/tasks/2 | jq
 curl -X POST -H "Content-Type: application/json" -d '{"name":"追加したタスク", "status":1}' http://localhost:8080/tasks
 ```
 
+- 更新
+```shell
+curl -X PATCH -H "Content-Type: application/json" -d '{"name":"更新したタスク"}' http://localhost:8080/tasks/1
+```
+
 ## 参考
 
 - [Golang(docker-hub)](https://hub.docker.com/_/mysql)

@@ -52,6 +52,7 @@ func main() {
 	r.HandleFunc("/tasks", getListTasksHandler).Methods("GET")
 	r.HandleFunc("/tasks/{id:[0-9]+}", getOneTaskHandler).Methods("GET")
 	r.HandleFunc("/tasks", addTaskHandler).Methods("POST")
+	r.HandleFunc("/tasks/{id:[0-9]+}", updateTaskHandler).Methods("PATCH")
 
 	http.Handle("/", r)
 
@@ -146,4 +147,36 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// 挿入されたタスクのIDを取得し、ログに出力
 	id, _ := result.LastInsertId()
 	log.Printf("Inserted task ID: %d", id)
+}
+
+func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var task Task
+	err := json.NewDecoder(r.Body).Decode(&task)
+
+	if err != nil {
+		http.Error(w, "Failed to decode request body", http.StatusBadRequest)
+		return
+	}
+
+	defer r.Body.Close()
+
+	// 挿入する値が正しいかどうか確認
+	log.Printf("Received task: %+v", task)
+
+	// タスクを更新
+	result, err := db.Exec("UPDATE tasks SET name = ? WHERE id = ? ", &task.Name, vars["id"])
+	if err != nil {
+		log.Printf("Failed to update task in database: %v", err)
+		http.Error(w, "Failed to insert task into database", http.StatusInternalServerError)
+		return
+	}
+
+	// 成功応答
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Task updated successfully")
+
+	// 更新されたタスクのIDを取得し、ログに出力
+	id, _ := result.RowsAffected()
+	log.Printf("Updated task ID: %d", id)
 }
