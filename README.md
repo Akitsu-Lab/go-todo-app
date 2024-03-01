@@ -36,6 +36,10 @@ docker compose down --rmi all --volumes --remove-orphans
   mysql -u root -p --port=13306 --protocol=TCP
   ```
 
+## DBをリセットしたい場合
+
+dataディレクトリを削除
+
 ## 参考
 
 - [Docker Composeの概要](https://matsuand.github.io/docs.docker.jp.onthefly/compose/)
