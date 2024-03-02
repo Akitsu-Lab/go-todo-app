@@ -11,3 +11,8 @@ npm run dev
 docker build -t todo_frontend .
 ```
 
+## アクセス
+
+```shell
+curl http://localhost:3000/
+```
