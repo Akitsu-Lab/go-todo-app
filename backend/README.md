@@ -45,6 +45,11 @@ curl -X POST -H "Content-Type: application/json" -d '{"name":"追加したタス
 curl -X PATCH -H "Content-Type: application/json" -d '{"name":"更新したタスク"}' http://localhost:8080/tasks/1
 ```
 
+- 削除
+```shell
+curl -X DELETE http://localhost:8080/tasks/1
+```
+
 ## 参考
 
 - [Golang(docker-hub)](https://hub.docker.com/_/mysql)

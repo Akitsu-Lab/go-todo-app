@@ -53,6 +53,7 @@ func main() {
 	r.HandleFunc("/tasks/{id:[0-9]+}", getOneTaskHandler).Methods("GET")
 	r.HandleFunc("/tasks", addTaskHandler).Methods("POST")
 	r.HandleFunc("/tasks/{id:[0-9]+}", updateTaskHandler).Methods("PATCH")
+	r.HandleFunc("/tasks/{id:[0-9]+}", deleteTaskHandler).Methods("DELETE")
 
 	http.Handle("/", r)
 
@@ -179,4 +180,28 @@ func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// 更新されたタスクのIDを取得し、ログに出力
 	id, _ := result.RowsAffected()
 	log.Printf("Updated task ID: %d", id)
+}
+
+func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var task Task
+
+	// 挿入する値が正しいかどうか確認
+	log.Printf("Received task: %+v", task)
+
+	// タスクを更新
+	result, err := db.Exec("DELETE FROM tasks WHERE id = ? ", vars["id"])
+	if err != nil {
+		log.Printf("Failed to delete task in database: %v", err)
+		http.Error(w, "Failed to delete task in database", http.StatusInternalServerError)
+		return
+	}
+
+	// 成功応答
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Task deleted successfully")
+
+	// 更新されたタスクのIDを取得し、ログに出力
+	id, _ := result.RowsAffected()
+	log.Printf("Deleted task ID: %d", id)
 }
