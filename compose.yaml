@@ -31,6 +31,8 @@ services:
   frontend:
     build: ./frontend
     container_name: "todo_frontend"
+    environment:
+      HOST: backend
     depends_on:
       - backend
     ports:
